@@ -1,0 +1,63 @@
+
+#Backend
+
+backend:
+  replicaCount: 1
+  image:
+    repository: quay.io/relessaw/citizendocs-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+#Frontend
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: quay.io/relessaw/citizendocs-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+  volumeMounts:
+    - name: nginx-cache
+      mountPath: /var/cache/nginx
+
+route:
+  frontend:
+    host: frontend.citizendocs.local
+
+#PostgreSQL
+
+postgresql:
+  auth:
+    username: postgres
+    password: mysecretpassword
+    database: citizendocs
+  primary:
+    service:
+      port: 5432
+    podSecurityContext:
+      enabled: false
+      fsGroup: ""
+    containerSecurityContext:
+      enabled: false
+      runAsUser: "auto"
+
+    readReplicas:
+      podSecurityContext:
+        enabled: false
+        fsGroup: ""
+      containerSecurityContext:
+        enabled: false
+        runAsUser: "auto"
+
+    volumePermissions:
+      enabled: false
+      securityContext:
+        runAsUser: "auto"
+
+resources: {}
