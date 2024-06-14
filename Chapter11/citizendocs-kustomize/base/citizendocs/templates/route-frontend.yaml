@@ -1,0 +1,13 @@
+---
+# Source: citizendocs/templates/route-frontend.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: citizendocs-frontend
+spec:
+  host: frontend.citizendocs.local
+  to:
+    kind: Service
+    name: citizendocs-frontend
+  port:
+    targetPort: 80

@@ -1,0 +1,7 @@
+# overlays/staging/replica_count.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: citizendocs-backend
+spec:
+  replicas: 4

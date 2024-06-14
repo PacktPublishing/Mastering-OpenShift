@@ -1,0 +1,33 @@
+---
+# Source: citizendocs/templates/deployment-backend.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: citizendocs-backend
+  labels:
+    app: citizendocs-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: citizendocs-backend
+  template:
+    metadata:
+      labels:
+        app: citizendocs-backend
+    spec:
+      containers:
+        - name: backend
+          image: "quay.io/relessaw/citizendocs-backend:latest"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: QUARKUS_DATASOURCE_JDBC_URL
+              value: jdbc:postgresql://citizendocs-postgresql:5432/citizendocs
+            - name: QUARKUS_DATASOURCE_USERNAME
+              value: postgres
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: citizendocs-postgresql
+                  key: postgres-password

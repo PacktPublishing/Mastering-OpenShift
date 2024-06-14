@@ -1,0 +1,15 @@
+---
+# Source: citizendocs/templates/service-backend.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: citizendocs-backend
+  labels:
+    app: citizendocs-backend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: citizendocs-backend

@@ -1,0 +1,29 @@
+---
+# Source: citizendocs/templates/deployment-frontend.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: citizendocs-frontend
+  labels:
+    app: citizendocs-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: citizendocs-frontend
+  template:
+    metadata:
+      labels:
+        app: citizendocs-frontend
+    spec:
+      containers:
+        - name: citizendocs-frontend
+          image: "quay.io/relessaw/citizendocs-frontend:latest"
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+      volumes:
+        - name: nginx-cache
+          emptyDir: {}

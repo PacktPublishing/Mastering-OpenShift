@@ -1,0 +1,15 @@
+---
+# Source: citizendocs/templates/service-frontend.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: citizendocs-frontend
+  labels:
+    app: citizendocs-frontend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: citizendocs-frontend
