@@ -48,8 +48,11 @@ spec:
     params:
     - name: DOCKERFILE
       value: $(workspaces.source.path)/Chapter10/citizendocs-backend/Dockerfile
+    - name: CONTEXT
+      value: /Chapter10/citizendocs-backend/
     - name: IMAGE
       value: $(params.imageUrl)
+
       
   - name: helm-deploy
     taskRef:

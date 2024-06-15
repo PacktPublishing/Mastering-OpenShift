@@ -21,6 +21,6 @@ spec:
   - name: repo-url
     value: https://github.com/PacktPublishing/Mastering-OpenShift/
   - name: imageUrl
-    value: quay.io/relessaw/citizendocs-backend
+    value: quay.io/<your namespace>/citizendocs-backend
 
   
