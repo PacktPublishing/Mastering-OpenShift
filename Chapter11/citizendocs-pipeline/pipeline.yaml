@@ -1,0 +1,70 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: clone-build-push-helm-deploy
+spec:
+  description: |
+    This pipeline clones a git repo, builds an image with Kaniko,
+    pushes it to quay, and installs a Helm Chart
+  params:
+  - name: repo-url
+    description: Git repository url
+    type: string
+  - name: imageUrl
+    description: Image name including repository
+    type: string
+  - name: helm_release_version
+    type: string
+    description: The helm tag
+    default: latest
+  - name: target_namespace
+    type: string
+    description: The namespace to deploy in
+    default: citizendocs-pipeline
+  workspaces:
+  - name: shared-data
+  - name: docker-credentials
+  
+  tasks:
+  - name: clone-repo
+    taskRef:
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: shared-data
+    params:
+    - name: url
+      value: $(params.repo-url)
+
+  - name: build-push-to-quay
+    runAfter: ["clone-repo"]
+    taskRef:
+      name: kaniko
+    workspaces:
+    - name: source
+      workspace: shared-data
+    - name: dockerconfig
+      workspace: docker-credentials
+    params:
+    - name: DOCKERFILE
+      value: $(workspaces.source.path)/Chapter11/citizendocs-pipeline/Dockerfile
+    - name: IMAGE
+      value: $(params.imageUrl)
+      
+  - name: helm-deploy
+    taskRef:
+      name: helm-upgrade-from-source
+    runAfter: ["build-push-to-quay"]
+    workspaces:
+      - name: source
+        workspace: shared-data
+    params:
+        - name: charts_dir
+          value: "Chapter11/citizendocs-chart"
+        - name: release_version
+          value: $(params.helm_release_version)
+        - name: release_name
+          value: "citizendocs"
+        - name: release_namespace
+          value: $(params.target_namespace)
+    
