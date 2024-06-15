@@ -47,7 +47,7 @@ spec:
       workspace: docker-credentials
     params:
     - name: DOCKERFILE
-      value: $(workspaces.source.path)/Chapter11/citizendocs-pipeline/Dockerfile
+      value: $(workspaces.source.path)/Chapter10/citizendocs-backend/Dockerfile
     - name: IMAGE
       value: $(params.imageUrl)
       
